@@ -4,7 +4,8 @@
     "declaration": true,
     "outDir": "./lib",
     "importHelpers": true,
-    "target": "es2017"
+    "target": "es2017",
+    "rootDir": "./src"
   },
   "include": [
     "./src/**/*"
