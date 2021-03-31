@@ -4,7 +4,6 @@ import { AnyJson, JsonMap } from '@salesforce/ts-types';
 // import { cli } from 'cli-ux';
 import { HTTP } from 'http-call';
 
-
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('isvte-packagepushplugin', 'pushplugin');
@@ -27,7 +26,7 @@ export default class List extends SfdxCommand {
       const response = await (await HTTP.get<Instance[]>(url)).body;
 
       const fields = ['key', 'location', 'environment'];
-      const instances: Partial<Instance>[] = response.map((value, index, array) => {
+      const instances: Array<Partial<Instance>> = response.map((value, index, array) => {
         const output: Partial<Instance> = {};
         fields.forEach(f => {
           output[f] = value[f];
@@ -35,7 +34,7 @@ export default class List extends SfdxCommand {
         return output;
       });
 
-      instances.sort()
+      instances.sort();
 
       // Get distinct locations
       /* const locations: string[] = [];
@@ -58,7 +57,6 @@ Array.prototype.complexSort = function(field: string) {
 
 }
 
-
 function groupBy<T>(input: T[], key:string) {
   return input.reduce(function(rv, x: T) {
     const a: T[] = (rv[x[key]] = rv[x[key]] || [])
@@ -67,7 +65,6 @@ function groupBy<T>(input: T[], key:string) {
   }, {})
 }
 */
-
 
 interface Instance extends JsonMap {
   key: string;

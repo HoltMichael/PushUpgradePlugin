@@ -22,7 +22,7 @@ $ npm install -g isvte-packagepushplugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-isvte-packagepushplugin/0.0.0 darwin-x64 node-v15.4.0
+isvte-packagepushplugin/0.0.0 darwin-x64 node-v14.16.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
