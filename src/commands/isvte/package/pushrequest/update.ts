@@ -1,29 +1,28 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
-import { SuccessResult } from 'jsforce';
+import { cli } from 'cli-ux';
+import { Connection } from 'jsforce';
+import { PackagePushRequest } from '../../../../ts-types';
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
-
-// Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
-// or any library that is using the messages framework can also be loaded this way.
 const messages = Messages.loadMessages('isvte-packagepushplugin', 'pushplugin');
 
 export default class Update extends SfdxCommand {
 
-  public static description = messages.getMessage('updateDescription');
+  public static description = messages.getMessage('isvte_package_pushrequest_update__Description');
   protected static flagsConfig = {
-    packagepushrequests: flags.array({char: 'r', delimiter: ',', required: false, description: messages.getMessage('packagepushrequestsFlagDescription')}),
-    allcreated: flags.boolean({char: 'c', required: false, exclusive: ['packagepushrequests'], description: messages.getMessage('allcreatedFlagDescription')}),
-    allpending: flags.boolean({char: 'p', required: false, exclusive: ['packagepushrequests'], description: messages.getMessage('allpendingFlagDescription')}),
-    status: flags.enum({char: 's', options: ['Canceled', 'Pending'], required: true, description: messages.getMessage('statusFlagDescription')})
+    id: flags.id({exclusive: ['where'], description: messages.getMessage('isvte_package_pushrequest_update__packagepushrequestsFlagDescription')}),
+    where: flags.string({exclusive: ['packagepushrequestid'], description: messages.getMessage('isvte_package_pushrequest_update__whereFlagDescription')}),
+    status: flags.enum({options: ['Canceled', 'Pending'], required: true, description: messages.getMessage('isvte_package_pushrequest_update__statusFlagDescription')}),
+    preview: flags.boolean({description: messages.getMessage('isvte_package_pushrequest_update__previewFlagDescription')})
   };
 
   protected static requiresUsername = true;
   protected static requiresDevhubUsername = true;
 
-  protected static createRequestBody(packagepushrequestIds: string[], status: string): object {
+  protected static createPartialPackagePushRequests(packagepushrequestIds: string[], status: string): Array<Partial<PackagePushRequest>> {
     const output = [];
     packagepushrequestIds.forEach(id => {
       output.push({Id: id, Status: status});
@@ -32,41 +31,61 @@ export default class Update extends SfdxCommand {
     return output;
   }
 
-  public async run(): Promise<AnyJson> {
-    // Validate incompatible parameters
-    if (this.flags.allpending && this.flags.status === 'Pending') {
-      throw new SfdxError('Invalid flags, cannot use --allpending with --status Pending.');  // TODO: Replace with message
+  protected static async getPackagePushRequestIds(conn: Connection, id: string, where: string): Promise<string[]> {
+    const output: string[] = [];
+
+    if (id && !where) {
+      // Use the single id provided
+      output.push(id);
+    } else if (!id && where) {
+      // Execute a query to retreive the list of PackagePushRequestIds
+      cli.action.start('Executing query for requested PackagePushRequests.');
+
+      const results = await conn.sobject<PackagePushRequest>('PackagePushRequest')
+      .select('Id')
+      .where(where);
+
+      cli.action.stop(`Returned ${results.length} records.`);
+
+      if (results.length <= 0) {
+        throw new SfdxError('No packagePushRequestIds meet specified criteria.');
+      }
+
+      results.forEach(i => {
+        output.push(i.Id);
+      });
+    } else {
+      throw new SfdxError('Invalid flags passed!');
     }
 
+    return output;
+  }
+
+  public async run(): Promise<AnyJson> {
     // this org is guaranteed because requiresUsername=true, as opposed to supportsUsername
     const conn = this.org.getConnection();
 
-    let packagePushRequestIds: string[] = [];
-    if (this.flags.allcreated || this.flags.allpending) {
-      // Fetch all created/pending packagePushRequests
-      // TODO: Query all 'Created' or 'Pending' PackagePushRequests, depeding on flags
-    } else {
-      packagePushRequestIds = this.flags.packagepushrequests as string[];
-    }
-
-    if (packagePushRequestIds.length <= 0) {
-      this.ux.log('No packagePushRequestIds meet specified criteria.'); // TODO: Update to use message
-      return;
-    }
-
-    const status: string = this.flags.status;
-
-    const requestBody = Update.createRequestBody(packagePushRequestIds, status);
-    this.ux.styledJSON(requestBody);
-
+    let pprs: Array<Partial<PackagePushRequest>>;
     try {
-      const response: SuccessResult = await conn.update('PackagePushRequest', requestBody) as SuccessResult;
-      this.ux.styledJSON(response);
+      const packagePushRequestIds: string[] = await Update.getPackagePushRequestIds(conn, this.flags.id, this.flags.where);
+      pprs = Update.createPartialPackagePushRequests(packagePushRequestIds, this.flags.status);
     } catch (err) {
-      this.ux.log('PackagePushRequest Status Update Failed');
+      this.ux.error('Error parsing parameters that determine the PackagePushRequest records to update, --id or --where.  Please review help for more information.');
       throw new SfdxError(err.message);
     }
 
-    return;
+    if (this.flags.preview) {
+      this.ux.styledJSON(pprs);
+      return pprs;
+    } else {
+      try {
+        const results = await conn.sobject('PackagePushRequest').update(pprs, {allOrNone: true}, null);
+        this.ux.styledJSON(results);
+        return results.toString();
+      } catch (err) {
+        this.ux.error('PackagePushRequest Status Update Failed');
+        throw new SfdxError(err.message);
+      }
+    }
   }
 }

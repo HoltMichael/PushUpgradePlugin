@@ -1,119 +1,103 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { Messages, fs, SfdxError } from '@salesforce/core';
+import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { RequestInfo } from 'jsforce';
-import { join } from 'path';
-import { CompositeTreeResponse } from '../../../../shared';
-
-
-
-
-//import Subscribers from '../subscribers';
+import { deserializeJson } from '../../../../helpers';
+import { CompositeTreeRequest, CompositeTreeRequestRecord, CompositeTreeResponse } from '../../../../ts-types';
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
-
-// Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
-// or any library that is using the messages framework can also be loaded this way.
 const messages = Messages.loadMessages('isvte-packagepushplugin', 'pushplugin');
 
 export default class Create extends SfdxCommand {
 
-  public static description = messages.getMessage('createDescription');
+  public static description = messages.getMessage('isvte_package_pushrequest_create__Description');
 
   protected static flagsConfig = {
-    packageversion: flags.string({char: 'p', required: true, description: messages.getMessage('packageVersionFlagDescription')}),
-    scheduledstarttime: flags.datetime({char: 't', required: false, description: messages.getMessage('scheduledStartTimeFlagDescription')}),
-    organisationid: flags.array({char: 'o', delimiter: ',', required: false, description: messages.getMessage('organisationidFlagDescription')}),
-    subscriberorgidfile: flags.filepath({char: 's', description: messages.getMessage('subscriberorgidsFlagDescription'),required: false}),
+    packageversionid: flags.id({required: true, description: messages.getMessage('isvte_package_pushrequest_create__packageVersionFlagDescription')}),
+    scheduledstarttime: flags.datetime({description: messages.getMessage('isvte_package_pushrequest_create__scheduledStartTimeFlagDescription')}),
+    subscriberids: flags.array({exclusive: ['subscribersfile'], delimiter: ',', description: messages.getMessage('isvte_package_pushrequest_create__subscriberidsFlagDescription')}),
+    subscribersfile: flags.filepath({exclusive: ['subscriberids'], description: messages.getMessage('isvte_package_pushrequest_create__subscribersfileFlagDescription')}),
+    preview: flags.boolean({description: messages.getMessage('isvte_package_pushrequest_create__subscribersfileFlagDescription')})
   };
 
   protected static requiresUsername = true;
   protected static requiresDevhubUsername = true;
 
-  protected static createRequestBody(packageVersionId: string, scheduledStartTime: Date, subscribers: string[]) {
-    let referenceCounter = 0;
-
-    if(!scheduledStartTime){
-      scheduledStartTime = new Date();
-    }
-
-    const output = {
-      records: [{
-        attributes: {type: 'PackagePushRequest', referenceId: 'ref' + referenceCounter.toString()},
-        PackageVersionId: packageVersionId,
-        ScheduledStartTime: scheduledStartTime.toISOString(),
-        PackagePushJobs: {
-          records: []
-        }
-      }]
+  protected static createCompositeTreeRequest(packageVersionId: string, scheduledStartTime: Date, subscribers: string[]): CompositeTreeRequest {
+    // Create the children, in this case the PackagePushJobs
+    const children: CompositeTreeRequest = {
+      records: []
     };
 
+    let referenceCounter = 1;
     subscribers.forEach(s => {
-      referenceCounter++; // increment referenceId counter
-
-      const ppj = {
-        attributes: {type: 'PackagePushJob', referenceId: 'ref' + referenceCounter.toString()},
-        // PackagePushRequestId: output.records[0].attributes.referenceId,
+      const ppj: CompositeTreeRequestRecord = {
+        attributes: {type: 'PackagePushJob', referenceId: `ref${referenceCounter}`},
         SubscriberOrganizationKey: s
       };
 
-      output.records[0].PackagePushJobs.records.push(ppj);
+      children.records.push(ppj);
+      referenceCounter++; // increment referenceId counter
     });
+
+    // Create the parent, in this case a single PackagePushRequest
+    const parent: CompositeTreeRequestRecord = {
+      attributes: {type: 'PackagePushRequest', referenceId: 'ref0'},
+      PackageVersionId: packageVersionId,
+      ScheduledStartTime: (scheduledStartTime) ? scheduledStartTime.toISOString() : null,
+      PackagePushJobs: children
+    };
+
+    // Create the CompositeTreeRequest, as the root container for the parent
+    const output: CompositeTreeRequest = {
+      records: [parent]
+    };
 
     return output;
   }
 
-  async readJsonFile(): Promise<AnyJson>{
-    try{
-      return fs.readJson(this.flags.subscriberOrgIds);
-    }catch(err){
-      let outputmsg: AnyJson = err.message;
-      return outputmsg;
-    }
-  }
-
   public async run(): Promise<AnyJson> {
-    const packageVersionId: string = this.flags.packageversion;
+    const JSON_FILE_SUBSCRIBER_ORG_ID_ATTRIBUTE_NAME = 'OrgKey';
+
+    const packageVersionId: string = this.flags.packageversionid;
     const scheduledStartTime: Date = this.flags.scheduledstarttime;
 
-    //TO DO
-    //Create an Update command to change the status of the PushRequests
-    //Create a cancellation?
-    //Could use something like this to find a file in the tree called Subscribers: const file = await fs.traverseForFile(__dirname, 'Subscribers.json');
-    //Should also permit users to pass a directory for the file and a single org parameter -o
+    const subscribers: string[] = [];
+    if (this.flags.subscribersfile) {
+      const records = deserializeJson(this.flags.subscribersfile);
+      records.forEach(r => subscribers.push(r[JSON_FILE_SUBSCRIBER_ORG_ID_ATTRIBUTE_NAME]));
+    }
 
-    const directory = this.flags.subscriberorgidfile;'';// __dirname;
-    const subscriberFile=await fs.readFile(join(directory), 'utf-8');
-    const subscriberObj = JSON.parse(subscriberFile);
-    //let subscribers = myObj.subscribers.orgId;
-    let subscribers: string[] = [];
-    subscriberObj.subscribers.forEach(sub => {
-      subscribers.push(sub.orgId);
-    });
+    if (this.flags.subscriberids) {
+      this.flags.subscriberids.forEach(i => subscribers.push(i));
+    }
 
-    const requestBody = Create.createRequestBody(packageVersionId, scheduledStartTime, subscribers);
-    // this.ux.styledJSON(requestBody);
+    const requestBody = Create.createCompositeTreeRequest(packageVersionId, scheduledStartTime, subscribers);
 
-    // this org is guaranteed because requiresUsername=true, as opposed to supportsUsername
-    const conn = this.org.getConnection();
+    if (this.flags.preview) {
+      // Display the request
+      this.ux.styledJSON(requestBody);
+      return requestBody;
+    } else {
+      // this org is guaranteed because requiresUsername=true, as opposed to supportsUsername
+      const conn = this.org.getConnection();
 
-    try {
-      const r: RequestInfo = {url: '/services/data/v49.0/composite/tree/PackagePushRequest/', body: JSON.stringify(requestBody), method: 'POST'};
-      const response: CompositeTreeResponse = await conn.request(r) as CompositeTreeResponse;
-      // const compositeResponse: CompositeTreeResponse = asObject(response);
-      // const compositeResponse: CompositeTreeResponse = response;
+      try {
+        const r: RequestInfo = {url: '/services/data/v49.0/composite/tree/PackagePushRequest/', body: JSON.stringify(requestBody), method: 'POST'};
+        const response: CompositeTreeResponse = await conn.request(r) as CompositeTreeResponse;
 
-      if (!response.hasErrors) {
-        // find the result for ref0, this is the PackagePushRequest record
-        const ppr = response.results.find(record => record.referenceId === 'ref0');
-        this.ux.log('Created PackagePushRequest, Id = ' + ppr.id);
+        if (!response.hasErrors) {
+          // find the result for ref0, this is the PackagePushRequest record
+          const ppr = response.results.find(record => record.referenceId === 'ref0');
+          this.ux.log('Created PackagePushRequest, Id = ' + ppr.id);
 
-        return response;
+          return response;
+        }
+      } catch (err) {
+        this.ux.log('PackagePushRequest Failed');
+        throw new SfdxError(err.message);
       }
-    } catch (err) {
-      this.ux.log('PackagePushRequest Failed');
-      throw new SfdxError(err.message);
     }
   }
 }

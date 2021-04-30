@@ -22,7 +22,7 @@ $ npm install -g isvte-packagepushplugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-isvte-packagepushplugin/0.0.0 darwin-x64 node-v10.13.0
+isvte-packagepushplugin/0.0.0 darwin-x64 node-v14.16.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -30,221 +30,262 @@ USAGE
 ```
 <!-- usagestop -->
 <!-- commands -->
-* [`sfdx isvte:package:pushrequest:create -p <string> [-t <datetime>] [-o <array>] [-s <filepath>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestcreate--p-string--t-datetime--o-array--s-filepath--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-* [`sfdx isvte:package:pushrequest:listjobs [-r <string>] [-s <array>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestlistjobs--r-string--s-array--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-* [`sfdx isvte:package:pushrequest:listrequests [-v <string>] [-s <array>] [-f] [-d <string>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestlistrequests--v-string--s-array--f--d-string--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-* [`sfdx isvte:package:pushrequest:subscribers [-p <string>] [-v <string>] [--orgtype <array>] [--orgstatus <array>] [-o <array>] [--anyinstallstatus] [-d <string>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestsubscribers--p-string--v-string---orgtype-array---orgstatus-array--o-array---anyinstallstatus--d-string--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-* [`sfdx isvte:package:pushrequest:update -s Canceled|Pending [-c | -r <array>] [-p | undefined] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestupdate--s-canceledpending--c---r-array--p--undefined--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:package:pushrequest:create --packageversionid <id> [--scheduledstarttime <datetime>] [--subscriberids <array> | --subscribersfile <filepath>] [--preview] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestcreate---packageversionid-id---scheduledstarttime-datetime---subscriberids-array----subscribersfile-filepath---preview--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:package:pushrequest:list [-f <array>] [-w <string>] [-o <string>] [-l <integer>] [--includejobs] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestlist--f-array--w-string--o-string--l-integer---includejobs--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:package:pushrequest:update --status Canceled|Pending [--id <id> | --where <string>] [--preview] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagepushrequestupdate---status-canceledpending---id-id----where-string---preview--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:package:subscribers [-f <array>] [-w <string>] [-o <string>] [-l <integer>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtepackagesubscribers--f-array--w-string--o-string--l-integer--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:trust:instance:list [--sort <string>] [--childproducts] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvtetrustinstancelist---sort-string---childproducts---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:util:split --input <filepath> --property <string> --outputdirectory <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvteutilsplit---input-filepath---property-string---outputdirectory-directory---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx isvte:util:subtract -a <filepath> -b <filepath> -k <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-isvteutilsubtract--a-filepath--b-filepath--k-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
-## `sfdx isvte:package:pushrequest:create -p <string> [-t <datetime>] [-o <array>] [-s <filepath>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+## `sfdx isvte:package:pushrequest:create --packageversionid <id> [--scheduledstarttime <datetime>] [--subscriberids <array> | --subscribersfile <filepath>] [--preview] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Create PackagePushRequest and associated PackagePushJob records.
 
 ```
 USAGE
-  $ sfdx isvte:package:pushrequest:create -p <string> [-t <datetime>] [-o <array>] [-s <filepath>] [-v <string>] [-u 
-  <string>] [--apiversion <string>] [--json] [--loglevel 
-  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+  $ sfdx isvte:package:pushrequest:create --packageversionid <id> [--scheduledstarttime <datetime>] [--subscriberids 
+  <array> | --subscribersfile <filepath>] [--preview] [-v <string>] [-u <string>] [--apiversion <string>] [--json] 
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -o, --organisationid=organisationid
-      Single org ID to create a push request for.
+  -u, --targetusername=targetusername
+      username or alias for the target org; overrides default target org
 
-  -p, --packageversion=packageversion
+  -v, --targetdevhubusername=targetdevhubusername
+      username or alias for the dev hub org; overrides default dev hub org
+
+  --apiversion=apiversion
+      override the api version used for api requests made by this command
+
+  --json
+      format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
+      [default: warn] logging level for this command invocation
+
+  --packageversionid=packageversionid
       (required) PackageVersionID to upgrade the subscriber to.
 
-  -s, --subscriberorgidfile=subscriberorgidfile
-      JSON File of Subscribers to create a push request for.
+  --preview
+      Path to JSON file of subscriber org ids, to create associated PackagePushJobs for.  Expects array of objects such as 
+      {OrgKey: 'XXXXXXXXXXXXX'}
 
-  -t, --scheduledstarttime=scheduledstarttime
+  --scheduledstarttime=scheduledstarttime
       The date and time (UTC) at which the push request is processed, in ISO 8601 format. Set this value to the earliest 
       time that you want Salesforce to attempt to start the push. As a best practice, schedule pushes at off-peak hours 
       like 1:00 AM Saturday. If you don’t specify a value, the push starts when the package push request’s Status is set 
       to Pending.
 
-  -u, --targetusername=targetusername
-      username or alias for the target org; overrides default target org
+  --subscriberids=subscriberids
+      Comma separated list of subscriber org ids, to create associated PackagePushJobs for.
 
-  -v, --targetdevhubusername=targetdevhubusername
-      username or alias for the dev hub org; overrides default dev hub org
-
-  --apiversion=apiversion
-      override the api version used for api requests made by this command
-
-  --json
-      format output as json
-
-  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
-      [default: warn] logging level for this command invocation
+  --subscribersfile=subscribersfile
+      Path to JSON file of subscriber org ids, to create associated PackagePushJobs for.  Expects array of objects such as 
+      {OrgKey: 'XXXXXXXXXXXXX'}
 ```
 
 _See code: [lib/commands/isvte/package/pushrequest/create.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/create.js)_
 
-## `sfdx isvte:package:pushrequest:listjobs [-r <string>] [-s <array>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+## `sfdx isvte:package:pushrequest:list [-f <array>] [-w <string>] [-o <string>] [-l <integer>] [--includejobs] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 List PackagePushRequest records.
 
 ```
 USAGE
-  $ sfdx isvte:package:pushrequest:listjobs [-r <string>] [-s <array>] [-v <string>] [-u <string>] [--apiversion 
-  <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
-
-OPTIONS
-  -r, --pushrequest=pushrequest                                                     PackageVersionID that subscribers
-                                                                                    have installed.
-
-  -s, --status=status                                                               The status you want to set for the
-                                                                                    specified PackagePushRequest
-                                                                                    records.
-
-  -u, --targetusername=targetusername                                               username or alias for the target
-                                                                                    org; overrides default target org
-
-  -v, --targetdevhubusername=targetdevhubusername                                   username or alias for the dev hub
-                                                                                    org; overrides default dev hub org
-
-  --apiversion=apiversion                                                           override the api version used for
-                                                                                    api requests made by this command
-
-  --json                                                                            format output as json
-
-  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
-                                                                                    this command invocation
-```
-
-_See code: [lib/commands/isvte/package/pushrequest/listjobs.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/listjobs.js)_
-
-## `sfdx isvte:package:pushrequest:listrequests [-v <string>] [-s <array>] [-f] [-d <string>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
-
-List PackagePushRequest records.
-
-```
-USAGE
-  $ sfdx isvte:package:pushrequest:listrequests [-v <string>] [-s <array>] [-f] [-d <string>] [-v <string>] [-u 
-  <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx isvte:package:pushrequest:list [-f <array>] [-w <string>] [-o <string>] [-l <integer>] [--includejobs] [-v 
+  <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -d, --directoryforsave=directoryforsave                                           Directory to store the subscriber
-                                                                                    information pulled from your DevHub
+  -f, --fields=fields
+      [default: Id,DurationSeconds,EndTime,PackageVersionId,ScheduledStartTime,StartTime,Status] The fields from 
+      PackagePushRequest you wish to return.
 
-  -f, --createfile                                                                  Boolean - should these results be
-                                                                                    added to a JSON file. Useful for
-                                                                                    updating or cancelling push requests
-                                                                                    in a future command.
-
-  -s, --status=status                                                               The status you want to set for the
-                                                                                    specified PackagePushRequest
-                                                                                    records.
-
-  -u, --targetusername=targetusername                                               username or alias for the target
-                                                                                    org; overrides default target org
-
-  -v, --packageversion=packageversion                                               PackageVersionID that subscribers
-                                                                                    have installed.
-
-  -v, --targetdevhubusername=targetdevhubusername                                   username or alias for the dev hub
-                                                                                    org; overrides default dev hub org
-
-  --apiversion=apiversion                                                           override the api version used for
-                                                                                    api requests made by this command
-
-  --json                                                                            format output as json
-
-  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
-                                                                                    this command invocation
-```
-
-_See code: [lib/commands/isvte/package/pushrequest/listrequests.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/listrequests.js)_
-
-## `sfdx isvte:package:pushrequest:subscribers [-p <string>] [-v <string>] [--orgtype <array>] [--orgstatus <array>] [-o <array>] [--anyinstallstatus] [-d <string>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
-
-Retreive all subscribers for a given Package or PackageVersion
-
-```
-USAGE
-  $ sfdx isvte:package:pushrequest:subscribers [-p <string>] [-v <string>] [--orgtype <array>] [--orgstatus <array>] [-o 
-  <array>] [--anyinstallstatus] [-d <string>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
-  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
-
-OPTIONS
-  -d, --directoryforsave=directoryforsave
-      Directory to store the subscriber information pulled from your DevHub
+  -l, --limit=limit
+      Specify the maximum number of rows to return.
 
   -o, --orderby=orderby
-      [default: OrgType DESC,InstanceName,MetadataPackageId,MetadataPackageVersionId,OrgName] Order the results, supply a 
-      comma separated list of field names.  Can optionally include DESC modifier to sort in descending order.
-
-  -p, --package=package
-      PackageID that subscribers have installed.
+      [default: ScheduledStartTime, PackageVersionId] Order the results, supply a comma separated list of field names.  
+      Can optionally include DESC modifier to sort in descending order.
 
   -u, --targetusername=targetusername
       username or alias for the target org; overrides default target org
 
-  -v, --packageversion=packageversion
-      PackageVersionID that subscribers have installed.
-
   -v, --targetdevhubusername=targetdevhubusername
       username or alias for the dev hub org; overrides default dev hub org
 
-  --anyinstallstatus
-      Include PackageSubscriber records with any value for InstalledStatus, by default results are restricted to only 'i', 
-      or where the package is installed.
+  -w, --where=where
+      [default: Status != 'Canceled'] The SOQL where clause applied to limit the results.
 
   --apiversion=apiversion
       override the api version used for api requests made by this command
+
+  --includejobs
+      Retrieve the child PackagePushJob records linked to the requested PackagePushRequests.
 
   --json
       format output as json
 
   --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
       [default: warn] logging level for this command invocation
-
-  --orgstatus=orgstatus
-      Filter results by org status, supply a comma separated list of OrgStatus.
-
-  --orgtype=orgtype
-      Filter results by org type, supply a comma separated list of OrgTypes.
 ```
 
-_See code: [lib/commands/isvte/package/pushrequest/subscribers.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/subscribers.js)_
+_See code: [lib/commands/isvte/package/pushrequest/list.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/list.js)_
 
-## `sfdx isvte:package:pushrequest:update -s Canceled|Pending [-c | -r <array>] [-p | undefined] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+## `sfdx isvte:package:pushrequest:update --status Canceled|Pending [--id <id> | --where <string>] [--preview] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Pushes a package upgrade to a specified org
 
 ```
 USAGE
-  $ sfdx isvte:package:pushrequest:update -s Canceled|Pending [-c | -r <array>] [-p | undefined] [-v <string>] [-u 
-  <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx isvte:package:pushrequest:update --status Canceled|Pending [--id <id> | --where <string>] [--preview] [-v 
+  <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
-  -c, --allcreated                                                                  Alternative to providing
-                                                                                    PackagePushRequestIds, updates all
-                                                                                    records that have status 'Created'.
+  -u, --targetusername=targetusername
+      username or alias for the target org; overrides default target org
 
-  -p, --allpending                                                                  Alternative to providing
-                                                                                    PackagePushRequestIds, updates all
-                                                                                    records that have status 'Pending'.
+  -v, --targetdevhubusername=targetdevhubusername
+      username or alias for the dev hub org; overrides default dev hub org
 
-  -r, --packagepushrequests=packagepushrequests                                     Comma separated list of
-                                                                                    PackagePushRequestIds to update.
-                                                                                    Cannot be used in conjunction with
-                                                                                    --allcreated, or --allpending flags.
+  --apiversion=apiversion
+      override the api version used for api requests made by this command
 
-  -s, --status=(Canceled|Pending)                                                   (required) The status you want to
-                                                                                    set for the specified
-                                                                                    PackagePushRequest records.
+  --id=id
+      PackagePushRequestId to update.  Cannot be used in conjunction with --allcreated, or --allpending flags.
 
-  -u, --targetusername=targetusername                                               username or alias for the target
-                                                                                    org; overrides default target org
+  --json
+      format output as json
 
-  -v, --targetdevhubusername=targetdevhubusername                                   username or alias for the dev hub
-                                                                                    org; overrides default dev hub org
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
+      [default: warn] logging level for this command invocation
 
-  --apiversion=apiversion                                                           override the api version used for
-                                                                                    api requests made by this command
+  --preview
+      Preview the update request (JSON) without making the API call.
+
+  --status=(Canceled|Pending)
+      (required) The status you want to set for the specified PackagePushRequest records.
+
+  --where=where
+      Alternative to providing PackagePushRequestId, updates all records that match the provided where clause.  Recommend 
+      using with --preview option to review impact before executing.
+```
+
+_See code: [lib/commands/isvte/package/pushrequest/update.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/update.js)_
+
+## `sfdx isvte:package:subscribers [-f <array>] [-w <string>] [-o <string>] [-l <integer>] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Retreive all subscribers for a given Package or PackageVersion
+
+```
+USAGE
+  $ sfdx isvte:package:subscribers [-f <array>] [-w <string>] [-o <string>] [-l <integer>] [-v <string>] [-u <string>] 
+  [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -f, --fields=fields
+      [default: 
+      Id,InstalledStatus,InstanceName,MetadataPackageId,MetadataPackageVersionId,OrgKey,OrgName,OrgStatus,OrgType,ParentOr
+      g] The fields from PackageSubscriber you wish to return.
+
+  -l, --limit=limit
+      Specify the maximum number of rows to return.
+
+  -o, --orderby=orderby
+      [default: OrgType DESC, InstanceName, MetadataPackageId, MetadataPackageVersionId, OrgName] Order the results, 
+      supply a comma separated list of field names.  Can optionally include DESC modifier to sort in descending order.
+
+  -u, --targetusername=targetusername
+      username or alias for the target org; overrides default target org
+
+  -v, --targetdevhubusername=targetdevhubusername
+      username or alias for the dev hub org; overrides default dev hub org
+
+  -w, --where=where
+      [default: InstalledStatus = 'i'] The SOQL where clause applied to limit the results.
+
+  --apiversion=apiversion
+      override the api version used for api requests made by this command
+
+  --json
+      format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)
+      [default: warn] logging level for this command invocation
+```
+
+_See code: [lib/commands/isvte/package/subscribers.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/subscribers.js)_
+
+## `sfdx isvte:trust:instance:list [--sort <string>] [--childproducts] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Retreive all subscribers for a given Package or PackageVersion
+
+```
+USAGE
+  $ sfdx isvte:trust:instance:list [--sort <string>] [--childproducts] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  --childproducts                                                                   Include nested products. products
+                                                                                    must be set.
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --sort=sort                                                                       [default: location] Sort by property
+```
+
+_See code: [lib/commands/isvte/trust/instance/list.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/trust/instance/list.js)_
+
+## `sfdx isvte:util:split --input <filepath> --property <string> --outputdirectory <directory> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Split the records in one file into multiple output files based on a property.  A new file will be created using the property value as a suffix to the original filename.
+
+```
+USAGE
+  $ sfdx isvte:util:split --input <filepath> --property <string> --outputdirectory <directory> [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  --input=input                                                                     (required) The file that contains
+                                                                                    the full set of records.
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+  --outputdirectory=outputdirectory                                                 (required) The directory to create
+                                                                                    the output files in.
+
+  --property=property                                                               (required) The property used to
+                                                                                    split the output.
+```
+
+_See code: [lib/commands/isvte/util/split.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/util/split.js)_
+
+## `sfdx isvte:util:subtract -a <filepath> -b <filepath> -k <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Subtract the records in one file from the other. input a contains all records, input b contains all records to remove.
+
+```
+USAGE
+  $ sfdx isvte:util:subtract -a <filepath> -b <filepath> -k <string> [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -a, --inputa=inputa                                                               (required) Input A: File that
+                                                                                    contains the full set of records.
+
+  -b, --inputb=inputb                                                               (required) Input B: File that
+                                                                                    contains the set of records to
+                                                                                    remove from input a.
+
+  -k, --key=key                                                                     (required) Key to match records on
 
   --json                                                                            format output as json
 
@@ -252,7 +293,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/isvte/package/pushrequest/update.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/package/pushrequest/update.js)_
+_See code: [lib/commands/isvte/util/subtract.js](https://github.com/HoltMichael/PushPlugin/blob/v0.0.0/lib/commands/isvte/util/subtract.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
